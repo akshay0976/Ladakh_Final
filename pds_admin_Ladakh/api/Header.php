@@ -14,6 +14,7 @@
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		<script> var pythonUrl = "http://localhost:5000/"; var directory = "" </script>
 								
 		<style>
 		.popup {

@@ -1,6 +1,5 @@
 <?php
 require('Connection.php');
-set_time_limit(300);
 
 $ip_address = "";
 
@@ -18,24 +17,24 @@ else
   }
 
 session_start();
-if(isset($_SESSION['district_user'])){
-	$user = $_SESSION['district_user'];
-	$token = $_SESSION['district_token'];
+if(isset($_SESSION['user'])){
+	$user = $_SESSION['user'];
+	$token = $_SESSION['token'];
 	$query = "SELECT * FROM login WHERE username='$user' AND token='$token'";
 	$result = mysqli_query($con,$query);
 	$numrows = mysqli_num_rows($result);
 	
 	if($numrows==0){
-		header("Location:Login.html");
+		header("Location:AdminLogin.html");
 		exit();
 	}
-	
 	$currentLoginTime = date("Y-m-d H:i:s");
 	$queryUpdate = "UPDATE login SET lastlogin='$currentLoginTime' WHERE username='$user'";
 	mysqli_query($con,$queryUpdate);
+	
 }
 else{
-	header("Location:Login.html");
+	header("Location:AdminLogin.html");
 }
 
 ?>

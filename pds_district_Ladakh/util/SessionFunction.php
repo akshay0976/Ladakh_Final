@@ -4,9 +4,9 @@ function SessionCheck(){
 	require('Connection.php');
 	session_start();
 
-	if(isset($_SESSION['district_user'])){
-		$user = $_SESSION['district_user'];
-		$token = $_SESSION['district_token'];
+	if(isset($_SESSION['user'])){
+		$user = $_SESSION['user'];
+		$token = $_SESSION['token'];
 		$query = "SELECT * FROM login WHERE username='$user' AND token='$token'";
 		$result = mysqli_query($con,$query);
 		$numrows = mysqli_num_rows($result);

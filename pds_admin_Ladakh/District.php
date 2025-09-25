@@ -3,7 +3,8 @@ require('util/Connection.php');
 require('util/SessionCheck.php');
 require('Header.php');
 ?>
-
+<script src="crypto-js/crypto-js.js"></script>
+<script src="js/Encryption.js"></script>
 <style>
     td {
             font-size: 15px; /* Increase font size for table headers and data cells */
@@ -192,8 +193,12 @@ require('Header.php');
 		function VerifyAndDelete(){
 			var username = document.getElementById('username').value;
 			var password = document.getElementById('password').value;
+            var nonceValue = "nonce_value";
+
+            let encryption = new Encryption();
+            var encrypted = encryption.encrypt(password, nonceValue);
 			var temp_id = document.getElementById('deleteid').value;
-			post({uid: temp_id,username:username,password:password} ,"api/DistrictDelete.php");
+			post({uid: temp_id,username:username,password:encrypted} ,"api/DistrictDelete.php");
 		}
 		
 		function hidePopup() {

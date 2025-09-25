@@ -18,14 +18,24 @@ if($_SESSION['user']!=$person->getUsername()){
 	return;
 }
 
-$query = "SELECT * FROM login WHERE username='".$person->getUsername()."' AND password='".$person->getPassword()."'";
+
+// Fetch user by username
+$query = "SELECT * FROM login WHERE username='".$person->getUsername()."'";
 $result = mysqli_query($con,$query);
 $numrows = mysqli_num_rows($result);
 
 if($numrows == 0){
-	echo "Error : Password or Username is incorrect";
+	echo "Error : Username is incorrect";
 	return;
 }
+
+$row = mysqli_fetch_assoc($result);
+// Check password (hashed)
+if (!password_verify($person->getPassword(), $row['password'])) {
+	echo "Error : Password is incorrect";
+	return;
+}
+
 
 
 $person = new Login;
@@ -33,6 +43,10 @@ $person->setUsername($_POST["newusername"]);
 $person->setPassword($_POST["newpassword"]);
 $person->setRole($_POST["district"]);
 $uid = uniqid();
+
+
+// Hash the password before storing
+$hashedPassword = password_hash($person->getPassword(), PASSWORD_DEFAULT);
 
 $query = "SELECT * FROM login WHERE username='".$person->getUsername()."'";
 $result = mysqli_query($con,$query);
@@ -42,7 +56,7 @@ if($numrows == 1){
 	echo "Error : Username already exist";
 }
 else if($numrows == 0){
-	$query1 = "INSERT INTO login (username,password,uid,role,verified) VALUES ('".$person->getUsername()."','".$person->getPassword()."','$uid','".strtolower($person->getRole())."','1')";
+	$query1 = "INSERT INTO login (username,password,uid,role,verified) VALUES ('".$person->getUsername()."','".$hashedPassword."','$uid','".strtolower($person->getRole())."','1')";
 	mysqli_query($con,$query1);
 
 	mysqli_close($con);

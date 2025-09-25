@@ -19,12 +19,21 @@ if($_SESSION['user']!=$person->getUsername()){
 	return;
 }
 
-$query = "SELECT * FROM login WHERE username='".$person->getUsername()."' AND password='".$person->getPassword()."'";
+
+// Fetch user by username
+$query = "SELECT * FROM login WHERE username='".$person->getUsername()."'";
 $result = mysqli_query($con,$query);
 $numrows = mysqli_num_rows($result);
 
 if($numrows == 0){
-	echo "Error : Password or Username is incorrect";
+	echo "Error : Username is incorrect";
+	return;
+}
+
+$row = mysqli_fetch_assoc($result);
+// Check password (hashed)
+if (!password_verify($person->getPassword(), $row['password'])) {
+	echo "Error : Password is incorrect";
 	return;
 }
 

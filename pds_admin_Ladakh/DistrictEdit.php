@@ -1,7 +1,10 @@
 <?php
 require('util/Connection.php');
 require('util/SessionCheck.php');
-require('Header.php');
+
+if (!preg_match('/^[a-zA-Z0-9]+$/', $_POST["uid"])) {
+    die("Invalid UID format");
+}
 
 $uid = $_POST['uid'];
 $query = "SELECT * FROM Districts WHERE id='$uid'";
@@ -14,10 +17,25 @@ if($numrows!=0)
     {
 	 $name = $row['name'];
     }
+} else{
+	header("Location:District.php");
+    exit();
 }
 
-
+require('Header.php');
 ?>
+<script src="crypto-js/crypto-js.js"></script>
+<script src="js/Encryption.js"></script>
+<script>
+    function verifyCaptcha() {
+    var readableString = document.getElementById("password").value;
+    var nonceValue = "nonce_value";
+
+    let encryption = new Encryption();
+    var encrypted = encryption.encrypt(readableString, nonceValue);
+    document.getElementById("password").value = encrypted;
+    }
+</script>
               
                 <!-- START BREADCRUMB -->
                 <ul class="breadcrumb">
@@ -102,12 +120,10 @@ if($numrows!=0)
                                                     </div>
                                                     <span class="help-block">Password</span>
                                                 </div>
-                                            </div>
-											
-											
+                                            </div>	
                                         </div>
 										
-										<center><button class="btn btn-primary">Verify</button></center>
+										<center><button class="btn btn-primary" onclick="verifyCaptcha()">Verify</button></center>
 								</div>
                             </div>
                             </form>

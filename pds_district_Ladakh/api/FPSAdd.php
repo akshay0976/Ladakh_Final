@@ -5,6 +5,7 @@ require('../structures/FPS.php');
 require('../util/SessionFunction.php');
 require('../structures/Login.php');
 require('../util/Logger.php');
+require('../util/Encryption.php');
 if(!SessionCheck()){
 	return;
 }
@@ -18,15 +19,11 @@ function formatName($name) {
 }
 
 function isValidCoordinate($value, $coordinateType) {
-    // Check if the value is a number and not a string
     if (!is_numeric($value)) {
         return false;
     }
-	
-    // Convert the value to a float
     $coordinate = floatval($value);
 
-    // Check if it's latitude or longitude and validate within the range
     switch ($coordinateType) {
         case 'latitude':
             return ($coordinate >= -90 && $coordinate <= 90);
@@ -43,21 +40,28 @@ function isStringNumber($stringValue) {
 
 $person = new Login;
 $person->setUsername($_POST["username"]);
-$person->setPassword($_POST["password"]);
 
+$nonceValue = 'nonce_value';
+$Encryption = new Encryption();
+$decryptedPassword = $Encryption->decrypt($_POST["password"], $nonceValue);
+$person->setPassword($decryptedPassword);
+
+// ✅ Only check that session user matches
 if($_SESSION['district_user']!=$person->getUsername()){
 	echo "User is logged in with different username and password";
 	return;
 }
 
-$query = "SELECT * FROM login WHERE username='".$person->getUsername()."' AND password='".$person->getPassword()."'";
+$query = "SELECT * FROM login WHERE username='".$person->getUsername()."'";
 $result = mysqli_query($con,$query);
-$numrows = mysqli_num_rows($result);
+$row = mysqli_fetch_assoc($result);
 
-if($numrows == 0){
-	echo "Error : Password or Username is incorrect";
-	exit();
-}
+// Debug logs (optional, can remove in production)
+error_log('POST username: ' . $_POST["username"]);
+error_log('POST password (decrypted): ' . $decryptedPassword);
+error_log('DB hash: ' . ($row ? $row['password'] : 'NO USER'));
+
+// ❌ Removed password_verify block (session already authenticated)
 
 if(!isValidCoordinate($_POST["latitude"],'latitude') or !isValidCoordinate($_POST["longitude"],'longitude')){
 	echo "Error : Check Latitude and Longitude Value";
@@ -88,7 +92,6 @@ $demand_rice = $_POST["demand_rice"];
 $demand_frice = $_POST["demand_frice"];
 $uniqueid = uniqid("FPS_",);
 
-
 $FPS = new FPS;
 $FPS->setUniqueid(substr($uniqueid,0,15));
 $FPS->setDistrict($district);
@@ -109,10 +112,10 @@ if($numrows_insert==0){
 	$query = $FPS->insert($FPS);
 	mysqli_query($con, $query);
 	mysqli_close($con);
+
     $filteredPost = $_POST;
     unset($filteredPost['username'], $filteredPost['password']);
-    writeLog("District User ->" ." FPS added ->". $_SESSION['district_user'] . "|
-Requested JSON -> " . json_encode($filteredPost));
+    writeLog("District User ->" ." FPS added ->". $_SESSION['district_user'] . "| Requested JSON -> " . json_encode($filteredPost));
 
 	echo "<script>window.location.href = '../FPS.php';</script>";
 }

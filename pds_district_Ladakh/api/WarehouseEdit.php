@@ -4,9 +4,11 @@ require('../util/Connection.php');
 require('../structures/Warehouse.php');
 require('../util/SessionFunction.php');
 require('../structures/Login.php');
-require('../util/Logger.php'); 
-if(!SessionCheck()){
-	return;
+require('../util/Logger.php');
+require('../util/Encryption.php');
+
+if (!SessionCheck()) {
+    return;
 }
 
 require('Header.php');
@@ -18,22 +20,12 @@ function formatName($name) {
 }
 
 function isValidCoordinate($value, $coordinateType) {
-    // Check if the value is a number and not a string
-    if (!is_numeric($value)) {
-        return false;
-    }
-	
-    // Convert the value to a float
+    if (!is_numeric($value)) return false;
     $coordinate = floatval($value);
-
-    // Check if it's latitude or longitude and validate within the range
     switch ($coordinateType) {
-        case 'latitude':
-            return ($coordinate >= -90 && $coordinate <= 90);
-        case 'longitude':
-            return ($coordinate >= -180 && $coordinate <= 180);
-        default:
-            return false;
+        case 'latitude':  return ($coordinate >= -90 && $coordinate <= 90);
+        case 'longitude': return ($coordinate >= -180 && $coordinate <= 180);
+        default: return false;
     }
 }
 
@@ -41,44 +33,40 @@ function isStringNumber($stringValue) {
     return is_numeric($stringValue);
 }
 
-$person = new Login;
-$person->setUsername($_POST["username"]);
-$person->setPassword($_POST["password"]);
-
-if($_SESSION['district_user']!=$person->getUsername()){
-	echo "User is logged in with different username and password";
-	return;
+// ✅ Just use session user instead of POST password check
+$username = $_SESSION['district_user'] ?? null;
+if (!$username) {
+    echo "Session expired. Please log in again.";
+    exit;
 }
 
-$query = "SELECT * FROM login WHERE username='".$person->getUsername()."' AND password='".$person->getPassword()."'";
-$result = mysqli_query($con,$query);
-$numrows = mysqli_num_rows($result);
-
-if($numrows == 0){
-	echo "Error : Password or Username is incorrect";
-	return;
+// Optional: if form still sends username, make sure it matches session
+if (isset($_POST['username']) && $_POST['username'] !== $username) {
+    echo "User mismatch. Please log in again.";
+    exit;
 }
 
-if(!isValidCoordinate($_POST["latitude"],'latitude') or !isValidCoordinate($_POST["longitude"],'longitude')){
-	echo "Error : Check Latitude and Longitude Value";
-	exit();
+// ---- Input validations ----
+if (!isValidCoordinate($_POST["latitude"], 'latitude') || !isValidCoordinate($_POST["longitude"], 'longitude')) {
+    echo "Error : Check Latitude and Longitude Value";
+    exit;
 }
 
-if(!isStringNumber($_POST["storage"])){
-	echo "Error : Check Storage Value";
-	exit();
+if (!isStringNumber($_POST["storage"])) {
+    echo "Error : Check Storage Value";
+    exit;
 }
 
-$district = formatName($_POST["district"]);
-$latitude = $_POST["latitude"];
-$longitude = $_POST["longitude"];
-$name = formatName($_POST["name"]);
-$id = $_POST["id"];
-$type = $_POST["type"];
-$storage = $_POST["storage"];
-$warehousetype = $_POST["warehousetype"];
-$uniqueid = $_POST["uniqueid"];
-$active = $_POST["active"];
+$district     = formatName($_POST["district"]);
+$latitude     = $_POST["latitude"];
+$longitude    = $_POST["longitude"];
+$name         = formatName($_POST["name"]);
+$id           = $_POST["id"];
+$type         = $_POST["type"];
+$storage      = $_POST["storage"];
+$warehousetype= $_POST["warehousetype"];
+$uniqueid     = $_POST["uniqueid"];
+$active       = $_POST["active"];
 
 $Warehouse = new Warehouse;
 $Warehouse->setUniqueid($uniqueid);
@@ -93,16 +81,16 @@ $Warehouse->setWarehousetype($warehousetype);
 $Warehouse->setActive($active);
 
 $query = $Warehouse->update($Warehouse);
-
 mysqli_query($con, $query);
+
+// Log (without sensitive info)
+$filteredPost = $_POST;
+unset($filteredPost['username'], $filteredPost['password']);
+writeLog("District User -> Warehouse Edit -> $username | Requested JSON -> " . json_encode($filteredPost));
 
 mysqli_close($con);
 
-$filteredPost = $_POST;
-unset($filteredPost['username'], $filteredPost['password']);
-writeLog("District User ->" ." Warehouse Edit->". $_SESSION['district_user'] . "|
-Requested JSON -> " . json_encode($filteredPost));
 echo "<script>window.location.href = '../Warehouse.php';</script>";
 
 ?>
-<?php require('Fullui.php');  ?>
+<?php require('Fullui.php'); ?>

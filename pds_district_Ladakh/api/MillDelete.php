@@ -1,60 +1,71 @@
 <?php
-
 require('../util/Connection.php');
 require('../structures/Mill.php');
 require('../util/SessionFunction.php');
 require('../structures/Login.php');
 require('../util/Logger.php');
-if(!SessionCheck()){
-	return;
+require('../util/Encryption.php');
+
+session_start();
+
+if (!SessionCheck()) {
+    return;
 }
-$district = $_SESSION["district_district"];
 
 require('Header.php');
 
-$person = new Login;
-$person->setUsername($_POST["username"]);
-$person->setPassword($_POST["password"]);
-
-if($_SESSION['district_user']!=$person->getUsername()){
-	echo "User is logged in with different username and password";
-	return;
+// ---------- Validate session ----------
+if (!isset($_SESSION['district_user']) || !isset($_SESSION['district_password']) || !isset($_SESSION['district_district'])) {
+    echo "Session invalid. Please login again.";
+    return;
 }
 
-$query = "SELECT * FROM login WHERE username='".$person->getUsername()."' AND password='".$person->getPassword()."'";
-$result = mysqli_query($con,$query);
-$numrows = mysqli_num_rows($result);
-
-if($numrows == 0){
-	echo "Error : Password or Username is incorrect";
-	return;
+// ---------- Get UID from POST ----------
+$uid = isset($_POST['uid']) ? $_POST['uid'] : '';
+if (empty($uid)) {
+    echo "Missing UID for deletion.";
+    return;
 }
 
-$DCP = new DCP;
-$DCP->setUniqueid($_POST['uid']);
+// ---------- Initialize DCP object ----------
+$DCP = new DCP();
+$DCP->setUniqueid($uid);
 
-$query = $DCP->delete($DCP);
+// ---------- Determine district ----------
+$district = $_SESSION['district_district']; // for deleteAll
 
-if($_POST['uid']=="all"){
-	$query = $DCP->deletealldistrict($DCP, $district);
+// ---------- Choose delete function ----------
+if ($uid === "all") {
+    $query = $DCP->deletealldistrict($DCP, $district);
+} else {
+    $query = $DCP->delete($DCP);
 }
 
+// ---------- Execute deletion ----------
+if ($query) {
+    mysqli_query($con, $query);
+} else {
+    echo "Deletion query is invalid.";
+    return;
+}
+
+// ---------- Get log name ----------
 $log_query = $DCP->logname($DCP);
-$log_name= "all";
-$log_result = mysqli_query($con,$log_query);
-if ($log_result && $row = $log_result->fetch_assoc()) {
-$log_name = $row['name'];
+$log_name = "all";
+$log_result = mysqli_query($con, $log_query);
+if ($log_result && $log_row = mysqli_fetch_assoc($log_result)) {
+    $log_name = $log_row['name'];
 }
 
-mysqli_query($con,$query);
-mysqli_close($con);
-
+// ---------- Logging ----------
 $filteredPost = $_POST;
-unset($filteredPost['username'], $filteredPost['password']);
-writeLog("District User ->" ." Mill deleted -> ". $_SESSION['district_user'] . "| Requested JSON -> " . json_encode($filteredPost) . " | " . $log_name);
+unset($filteredPost['username'], $filteredPost['password']); // remove sensitive info
+writeLog("District User -> Mill deleted -> " . $_SESSION['district_user'] . 
+         " | Requested JSON -> " . json_encode($filteredPost) . " | " . $log_name);
 
+// ---------- Close connection and redirect ----------
+mysqli_close($con);
 echo "<script>window.location.href = '../Mill.php';</script>";
 
-
+require('Fullui.php');
 ?>
-<?php require('Fullui.php');  ?>

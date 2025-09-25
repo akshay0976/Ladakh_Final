@@ -1,0 +1,35 @@
+[2025-09-22 15:38:21] User -> District added ->admin@pds| Requested JSON -> {"name":"ssdf"}
+[2025-09-22 15:41:39] User -> District added ->admin@pds| Requested JSON -> {"name":"ttt"}
+[2025-09-22 15:56:13] User -> District Name Edit->admin@pds| Requested JSON -> {"name":"Kargiluuu","uid":"66ab22466b2e7"}
+[2025-09-22 15:56:31] User -> District Name Edit->admin@pds| Requested JSON -> {"name":"Kargil","uid":"66ab22466b2e7"}
+[2025-09-22 15:59:06] User -> District added ->admin@pds| Requested JSON -> {"name":"tuopo"}
+[2025-09-22 15:59:38] User -> District Name Edit->admin@pds| Requested JSON -> {"name":"Lehttttttttttttttttt","uid":"66ab2239014d1"}
+[2025-09-22 15:59:57] User -> District Name Edit->admin@pds| Requested JSON -> {"name":"Leh","uid":"66ab2239014d1"}
+[2025-09-22 16:12:24] User -> Mill added ->admin@pds| Requested JSON -> {"name":"agdsfbfgb","type":"yyyyyyyyyyy","latitude":"5","longitude":"10","district":"Kargil","id":"dfbfb@gmail.com","demand":"5000","demand_rice":"30"}
+[2025-09-22 16:15:22] User -> Mill deleted -> admin@pds| Requested
+JSON -> {"uid":"DCP_68d12810b87"} | agdsfbfgb
+[2025-09-22 16:15:59] User -> Mill added ->admin@pds| Requested JSON -> {"name":"sdgfdb","type":"fhbfgb","latitude":"12","longitude":"10","district":"Kargil","id":"sdfgdf@gmail.com","demand":"4545","demand_rice":"345"}
+[2025-09-22 16:16:15] User -> Mill deleted -> admin@pds| Requested
+JSON -> {"uid":"DCP_68d128e798a"} | sdgfdb
+[2025-09-22 16:17:59] User -> Mill Edit->admin@pds| Requested JSON
+-> {"name":"Atta Store\/Suru Valley RF Mill","uniqueid":"DCP_67028fd96a9","active":"1","type":"Mill","latitude":"34.398087","longitude":"75.992401","district":"Leh","id":"Mill2","demand":"44535.6","demand_rice":"200000"}
+[2025-09-22 16:18:58] User -> Mill added ->admin@pds| Requested JSON -> {"name":"gthdfgh","type":"shfgh","latitude":"34","longitude":"10","district":"Kargil","id":"fdfg@gmail.com","demand":"3454","demand_rice":"23423"}
+[2025-09-22 16:19:15] User -> Mill Edit->admin@pds| Requested JSON
+-> {"name":"gthdfghyjghnjghfgbfg","uniqueid":"DCP_68d1299a1d4","active":"1","type":"shfgh","latitude":"34","longitude":"10","district":"Kargil","id":"fdfg@gmail.com","demand":"3454","demand_rice":"23423"}
+[2025-09-22 16:19:32] User -> Mill deleted -> admin@pds| Requested
+JSON -> {"uid":"DCP_68d1299a1d4"} | Gthdfghyjghnjghfgbfg
+[2025-09-22 16:22:30] User -> Warehouse added ->admin@pds| Requested
+JSON -> {"name":"ABCDERTTY","type":"motorable","latitude":"23","storage":"5000","district":"Kargil","id":"123456","warehousetype":"swc","longitude":"34"}
+[2025-09-22 16:24:01] User -> Warehouse Edit->admin@pds| Requested JSON -> {"name":"Abcdertty1234","uniqueid":"WH_68d12a6ec91f","active":"1","type":"motorable","latitude":"23","storage":"5000","district":"Kargil","id":"123456","warehousetype":"swc","longitude":"34"}
+[2025-09-22 16:24:20] User -> Warehouse deleted -> admin@pds| Requested
+JSON -> {"uid":"WH_68d12a6ec91f"} | Abcdertty1234
+[2025-09-22 16:26:24] User -> FPS added ->admin@pds| Requested JSON -> {"name":"dhgjdhdfsg12345","type":"Model FPS","latitude":"12","longitude":"10","district":"Kargil","id":"99999","demand":"67","demand_rice":"689","demand_frice":"6788"}
+[2025-09-22 16:26:53] User -> FPS Edit->admin@pds| Requested JSON -> {"name":"dhgjdhdfsg","uniqueid":"FPS_68d12b5877e","active":"1","type":"Model FPS","latitude":"12","longitude":"10","district":"Kargil","id":"99999","demand":"67","demand_rice":"689","demand_frice":"6788"}
+[2025-09-22 16:27:12] User -> FPS deleted -> admin@pds| Requested JSON -> {"uid":"FPS_68d12b5877e"} | Dhgjdhdfsg
+[2025-09-22 16:30:14] User -> Verify User ->admin@pds| Requested JSON -> {"uid":"67163a9d4e46e"} | admin@pds
+[2025-09-22 16:30:26] User -> Verify User ->admin@pds| Requested JSON -> {"uid":"67163a9d4e46e"} | admin@pds
+[2025-09-22 16:36:50] User -> Mill added ->admin@pds| Requested JSON -> {"name":"ABCD","type":"Null","latitude":"12","longitude":"10","district":"Kargil","id":"absd@gmail.com","demand":"4555","demand_rice":"2345"}
+[2025-09-22 17:17:37] User -> Mill Edit->admin@pds| Requested JSON
+-> {"name":"ABCDE","uniqueid":"DCP_68d12dca5f7","active":"1","type":"Null","latitude":"12","longitude":"10","district":"Kargil","id":"absd@gmail.com","demand":"4555","demand_rice":"2345"}
+[2025-09-22 17:17:59] User -> Mill Edit->admin@pds| Requested JSON
+-> {"name":"Abcdeiiiii","uniqueid":"DCP_68d12dca5f7","active":"1","type":"Null","latitude":"12","longitude":"10","district":"Kargil","id":"absd@gmail.com","demand":"4555","demand_rice":"2345"}
