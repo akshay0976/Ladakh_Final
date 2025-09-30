@@ -99,9 +99,9 @@ require('Header.php');
 											
 											if($cost==null or $cost==""){
 												$temp = "cost_".$id;
-												$cost = "<input type='text' id='".$temp."' name='".$temp."' />";
+												$cost = "<input type='number' id='".$temp."' name='".$temp."' min='0' step='1' pattern='\\d*' oninput=\"this.value=this.value.replace(/[^\\d]/g,'')\" />";
 												$reset = "";
-											}											
+											}                                            
 											
 											echo "<tr><td>".$year."</td><td>".$month."</td><td>".$applicable."</td><td>".$allocation."</td><td>".$qkm."</td><td>".$averagedistanceoptimised."</td><td>".$cost."</td><td>".$reset."</td></tr>";
 									

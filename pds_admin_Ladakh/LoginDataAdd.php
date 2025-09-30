@@ -174,6 +174,11 @@ require('Header.php');
                 alert('Please enter all fields');
                 return false;
             }
+             var strongPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+    if (!strongPassword.test(password)) {
+        alert('Password must be at least 8 characters long and include uppercase, lowercase, number, and special character.');
+        return false;
+    }
 			
             document.getElementById('popup').style.display = 'block';
         }

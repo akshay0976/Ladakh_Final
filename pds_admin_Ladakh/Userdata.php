@@ -41,7 +41,7 @@ require('Header.php');
                                         <thead>
                                             <tr>
 												<th>Email Id</th>
-												<th>Password</th>
+												<!-- <th>Password</th> -->
                                                 <th>Verified</th>
                                                 <th>Role/District</th>
                                                 <th>Login Count</th>
@@ -68,7 +68,7 @@ require('Header.php');
 											}
 											
 											echo "<tr><td>{$row['username']}</td>".
-											 "<td>{$row['password']}</td>".
+											//  "<td>{$row['password']}</td>".
 											 "<td>$verified</td>".
 											 "<td>{$row['role']}</td>".
 											 "<td>{$row['count']}</td>".
